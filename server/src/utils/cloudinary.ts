@@ -14,7 +14,7 @@ export const uploadSingleImage = async (image: string, folder_name: string) => {
     folder: folder_name,
   });
 
-  console.log("cloudinary", response);
+//   console.log("cloudinary", response);
 
   return {
     image_url: response.secure_url,

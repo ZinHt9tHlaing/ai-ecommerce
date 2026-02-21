@@ -1,3 +1,4 @@
+import { Product } from "./../models/product-model";
 import { Request, Response } from "express";
 import { User } from "../models/user.model";
 import generateToken from "../utils/generateToken";
@@ -18,6 +19,7 @@ export const register = async (req: Request, res: Response) => {
     return res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     console.error(`Error from register, ${error}`);
+    res.status(500).json({ message: "Error from register" });
   }
 };
 
@@ -50,6 +52,7 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(`Error from login, ${error}`);
+    res.status(500).json({ message: "Error from login" });
   }
 };
 
@@ -64,6 +67,7 @@ export const getUser = async (req: CustomRequest, res: Response) => {
     return res.status(200).json(user);
   } catch (error) {
     console.error(`Error from get user, ${error}`);
+    res.status(500).json({ message: "Error from get user" });
   }
 };
 
@@ -87,6 +91,7 @@ export const getCartItem = async (req: CustomRequest, res: Response) => {
     return res.status(200).json(user);
   } catch (error) {
     console.error(`Error from get cart item, ${error}`);
+    res.status(500).json({ message: "Error from get cart item" });
   }
 };
 
@@ -100,7 +105,8 @@ export const updateProfile = async (req: CustomRequest, res: Response) => {
     if (name) updateData.name = name;
 
     if (req.file) {
-      const base64 = `data:${req.file.mimetype};base64, ${req.file.buffer.toString("base64")}`;
+      // convert image to base64
+      const base64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
 
       const uploadRes = await uploadSingleImage(base64, "ai-shop.com/profile");
 
@@ -117,5 +123,24 @@ export const updateProfile = async (req: CustomRequest, res: Response) => {
     res.status(201).json({ message: "Profile updated successfully" });
   } catch (error) {
     console.error(`Error from update profile, ${error}`);
+    res.status(500).json({
+      message: "Error from update profile",
+      error: error,
+    });
+  }
+};
+
+export const logout = async (req: CustomRequest, res: Response) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: ENV.NODE_ENV === "production",
+      sameSite: ENV.NODE_ENV === "production" ? "none" : "lax",
+    });
+
+    res.status(200).json({ message: "User logged out successfully" });
+  } catch (error) {
+    console.log(`Error from logout, ${error}`);
+    res.status(500).json({ message: "Error from logout" });
   }
 };
