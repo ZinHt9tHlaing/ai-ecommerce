@@ -4,7 +4,7 @@ import { CustomRequest } from "../types/customRequest";
 import { User } from "../models/user.model";
 import { ENV } from "../config/env";
 
-export const productRoute = async (
+export const protectRoute = async (
   req: CustomRequest,
   res: Response,
   next: NextFunction,

@@ -3,6 +3,7 @@ import { User } from "../models/user.model";
 import generateToken from "../utils/generateToken";
 import { ENV } from "../config/env";
 import { CustomRequest } from "../types/customRequest";
+import { uploadSingleImage } from "../utils/cloudinary";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -63,5 +64,58 @@ export const getUser = async (req: CustomRequest, res: Response) => {
     return res.status(200).json(user);
   } catch (error) {
     console.error(`Error from get user, ${error}`);
+  }
+};
+
+export const getCartItem = async (req: CustomRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const user = await User.findById(userId)
+      .populate({
+        path: "cartItem",
+        populate: {
+          path: "product",
+          model: "Product",
+        },
+      })
+      .select("cartItem");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error(`Error from get cart item, ${error}`);
+  }
+};
+
+export const updateProfile = async (req: CustomRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const name = req.body.name;
+
+    const updateData: any = {};
+
+    if (name) updateData.name = name;
+
+    if (req.file) {
+      const base64 = `data:${req.file.mimetype};base64, ${req.file.buffer.toString("base64")}`;
+
+      const uploadRes = await uploadSingleImage(base64, "ai-shop.com/profile");
+
+      updateData.profilePhoto = uploadRes.image_url;
+    }
+
+    const user = await User.findByIdAndUpdate({ _id: userId }, updateData, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(201).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error(`Error from update profile, ${error}`);
   }
 };
