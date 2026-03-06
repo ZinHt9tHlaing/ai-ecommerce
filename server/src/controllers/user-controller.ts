@@ -4,7 +4,7 @@ import { User } from "../models/user.model";
 import generateToken from "../utils/generateToken";
 import { ENV } from "../config/env";
 import { CustomRequest } from "../types/customRequest";
-import { uploadSingleImage } from "../utils/cloudinary";
+import { uploadSingleImage } from "../config/cloudinary";
 
 export const register = async (req: Request, res: Response) => {
   try {

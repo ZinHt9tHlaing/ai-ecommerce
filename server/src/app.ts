@@ -9,6 +9,7 @@ import "dotenv/config";
 
 // routes
 import userRoute from "./routes/user-route";
+import productRoute from "./routes/product-route";
 
 export const app: Application = express();
 
@@ -30,3 +31,4 @@ app
 
 // dynamic routes
 app.use('/api/user', userRoute)
+app.use('/api/product', productRoute)
