@@ -1,10 +1,7 @@
 import { Product } from "./../models/product-model";
 import { Request, Response } from "express";
-import { ENV } from "../config/env";
 import { deleteImage, uploadSingleImage } from "../config/cloudinary";
 import { redis } from "../config/upstash-redis";
-// import { GoogleGenerativeAI } from "@google/generative-ai";
-import OpenAI from "openai";
 import { generateAIText } from "../services/ai.service";
 
 // gemini ai
