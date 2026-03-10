@@ -1,6 +1,5 @@
 # 🧠 AI-Powered E-Commerce Platform
 
-
 A modern AI-driven E-commerce application built with the MERN stack, featuring advanced caching strategies, global state management, intelligent product recommendations, and high-performance data fetching.
 
 ## 🛠 Tech Stack
@@ -18,7 +17,7 @@ A modern AI-driven E-commerce application built with the MERN stack, featuring a
 - **Caching & Queue: Redis**
 - **Upstash**
 - **Stripe**
-- **Google Gemini**
+- **OpenAI**
 
 ### 🔐 Environment Variables
 
@@ -39,7 +38,8 @@ CLOUDINARY_API_SECRET=
 STRIPE_SECRET_KEY=
 STRIPE_PUBLISHABLE_KEY=
 
-GEMINI_API_KEY=
+OPENAI_API_KEY=
+
 UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 ```
