@@ -12,6 +12,7 @@ import userRoute from "./routes/user-route";
 import productRoute from "./routes/product-route";
 import cartRoute from "./routes/cart-route";
 import paymentRoute from "./routes/payment-route";
+import analyticsRoute from "./routes/analytics-route";
 
 export const app: Application = express();
 
@@ -36,4 +37,5 @@ app.use('/api/user', userRoute)
 app.use('/api/product', productRoute)
 app.use('/api/cart', cartRoute)
 app.use('/api/payment', paymentRoute)
+app.use('/api/analytics', analyticsRoute)
 
