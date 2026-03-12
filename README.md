@@ -1,6 +1,8 @@
 # 🧠 AI-Powered E-Commerce Platform
 
-A modern AI-driven E-commerce application built with the MERN stack, featuring advanced caching strategies, global state management, intelligent product recommendations, and high-performance data fetching.
+A modern AI-driven E-commerce application built with the **MERN stack**, featuring advanced caching strategies, global state management, intelligent product recommendations, and high-performance data fetching.
+
+This project uses **Cloudinary** for storing and managing images such as product images and user profile pictures.
 
 ## 🛠 Tech Stack
 
