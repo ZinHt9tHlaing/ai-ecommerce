@@ -17,7 +17,7 @@ const userRoute = express.Router();
 userRoute.post("/register", registerValidator, validateRequest, register);
 userRoute.post("/login", loginValidator, validateRequest, login);
 userRoute.get("/getUser", protectRoute, getUser);
-userRoute.put(
+userRoute.patch(
   "/updateProfile",
   protectRoute,
   upload.single("profilePhoto"),
