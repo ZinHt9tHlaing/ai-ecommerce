@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { Toaster } from "@/components/ui/sonner";
 import { RouterProvider } from "react-router";
-import { router } from "./routes.tsx";
+import { router } from "./config/router/index.tsx";
 import ReactQueryProvider from "./providers/ReactQueryProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
