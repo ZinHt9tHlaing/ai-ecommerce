@@ -1,4 +1,3 @@
-import { Product } from "./../models/product-model";
 import { Request, Response } from "express";
 import { User } from "../models/user.model";
 import generateToken from "../utils/generateToken";

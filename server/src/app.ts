@@ -13,12 +13,13 @@ import productRoute from "./routes/product-route";
 import cartRoute from "./routes/cart-route";
 import paymentRoute from "./routes/payment-route";
 import analyticsRoute from "./routes/analytics-route";
+import { ENV } from "./config/env";
 
 export const app: Application = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: ENV.CLIENT_URL,
     credentials: true,
   }),
 );
@@ -33,9 +34,8 @@ app
   .use(compression());
 
 // dynamic routes
-app.use('/api/user', userRoute)
-app.use('/api/product', productRoute)
-app.use('/api/cart', cartRoute)
-app.use('/api/payment', paymentRoute)
-app.use('/api/analytics', analyticsRoute)
-
+app.use("/api/user", userRoute);
+app.use("/api/product", productRoute);
+app.use("/api/cart", cartRoute);
+app.use("/api/payment", paymentRoute);
+app.use("/api/analytics", analyticsRoute);

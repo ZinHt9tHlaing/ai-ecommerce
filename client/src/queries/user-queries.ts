@@ -8,25 +8,12 @@ export const useRegisterMutation = () =>
   useMutation({
     mutationFn: ({ name, email, password }: RegisterPayload) =>
       userService.register({ name, email, password }),
-
-    onSuccess: (data) => {
-      console.log("Register data", data);
-    },
-    onError: (error) => {
-      console.log("Register error", error);
-    },
   });
 
 export const useLoginMutation = () =>
   useMutation({
     mutationFn: ({ email, password }: LoginPayload) =>
       userService.login({ email, password }),
-    onSuccess: (data) => {
-      console.log("Login data", data);
-    },
-    onError: (error) => {
-      console.log("Login error", error);
-    },
   });
 
 export const useGetUserProfileMQuery = () =>
