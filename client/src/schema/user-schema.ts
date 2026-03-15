@@ -11,5 +11,19 @@ export const loginSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters long"),
 });
 
+export const updateProfileSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters long"),
+  profilePhoto: z
+    .array(
+      z.object({
+        file: z.instanceof(File).optional(),
+        url: z.string(),
+        public_alt: z.string().optional(),
+      }),
+    )
+    .min(1, "At least one image is required"),
+});
+
 export type RegisterSchema = z.infer<typeof registerSchema>;
 export type LoginSchema = z.infer<typeof loginSchema>;
+export type UpdateProfileSchema = z.infer<typeof updateProfileSchema>;

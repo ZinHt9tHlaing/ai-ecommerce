@@ -36,7 +36,8 @@ export const login = async (req: Request, res: Response) => {
     generateToken(res, existingUser._id);
 
     if (existingUser.email === ENV.ADMIN_EMAIL) {
-      ((existingUser.owner = true), await existingUser.save());
+      existingUser.owner = true;
+      await existingUser.save();
 
       generateToken(res, existingUser._id);
 

@@ -40,15 +40,23 @@ const userService = {
     return response.data;
   },
 
-  updateProfile: async (payload: UpdateProfilePayload) => {
+  updateProfile: async ({ name, profilePhoto }: UpdateProfilePayload) => {
+    const formData = new FormData();
+    if (name) {
+      formData.append("name", name);
+    }
+    if (profilePhoto) {
+      formData.append("profilePhoto", profilePhoto);
+    }
+
     const response = await apiClient.patch<UpdateProfileResponse>(
       userEndpoints.updateProfile,
-      payload,
+      formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      },
+      }
     );
 
     return response.data;

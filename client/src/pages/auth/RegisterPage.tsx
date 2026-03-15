@@ -37,7 +37,7 @@ const RegisterPage = () => {
       await registerMutation(data, {
         onSuccess: (data) => {
           toast.success(data.message);
-          navigate("/", { replace: true });
+          navigate("/login", { replace: true });
         },
         onError: (error) => {
           if (axios.isAxiosError(error)) {

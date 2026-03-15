@@ -1,8 +1,11 @@
 import userService, {
   type LoginPayload,
   type RegisterPayload,
+  type UpdateProfilePayload,
 } from "@/services/user-services";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export const useRegisterMutation = () =>
   useMutation({
@@ -20,4 +23,13 @@ export const useGetUserProfileMQuery = () =>
   useQuery({
     queryKey: ["user-profile"],
     queryFn: userService.getUserProfile,
+  });
+
+export const useUpdateUserProfileMutation = () =>
+  useMutation({
+    mutationFn: ({ name, profilePhoto }: UpdateProfilePayload) =>
+      userService.updateProfile({ name, profilePhoto }),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-profile"] });
+    },
   });
