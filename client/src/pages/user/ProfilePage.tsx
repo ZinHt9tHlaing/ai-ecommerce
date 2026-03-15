@@ -43,7 +43,7 @@ const ProfilePage = () => {
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
       name: "",
-      profilePhoto: [],
+      profilePhoto: {},
     },
   });
 
@@ -53,7 +53,7 @@ const ProfilePage = () => {
     try {
       await updateProfileMutation({
         name: data.name,
-        profilePhoto: data.profilePhoto[0].file!,
+        profilePhoto: data.profilePhoto.file!,
       });
 
       toast.success("Profile updated");
@@ -135,12 +135,10 @@ const ProfilePage = () => {
 
                               setFile(file);
 
-                              form.setValue("profilePhoto", [
-                                {
-                                  file,
-                                  url: URL.createObjectURL(file),
-                                },
-                              ]);
+                              form.setValue("profilePhoto", {
+                                file,
+                                url: URL.createObjectURL(file),
+                              });
                             }}
                           />
                         </FormControl>
@@ -159,7 +157,10 @@ const ProfilePage = () => {
                         type="button"
                         onClick={() => {
                           removeFile();
-                          form.setValue("profilePhoto", []);
+                          form.setValue("profilePhoto", {
+                            file: undefined,
+                            url: "",
+                          });
 
                           if (fileInputRef.current) {
                             fileInputRef.current.value = "";

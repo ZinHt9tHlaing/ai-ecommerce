@@ -13,15 +13,11 @@ export const loginSchema = z.object({
 
 export const updateProfileSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters long"),
-  profilePhoto: z
-    .array(
-      z.object({
-        file: z.instanceof(File).optional(),
-        url: z.string(),
-        public_alt: z.string().optional(),
-      }),
-    )
-    .min(1, "At least one image is required"),
+  profilePhoto: z.object({
+    file: z.instanceof(File).optional(),
+    url: z.string(),
+    public_alt: z.string().optional(),
+  }),
 });
 
 export type RegisterSchema = z.infer<typeof registerSchema>;
