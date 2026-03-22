@@ -3,9 +3,8 @@ import userService, {
   type RegisterPayload,
   type UpdateProfilePayload,
 } from "@/services/user-services";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
+import type { GetUserProfileResponse } from "@/types/response/user-responses";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useRegisterMutation = () =>
   useMutation({
@@ -19,17 +18,49 @@ export const useLoginMutation = () =>
       userService.login({ email, password }),
   });
 
-export const useGetUserProfileMQuery = () =>
+export const useGetUserProfileQuery = () =>
   useQuery({
     queryKey: ["user-profile"],
     queryFn: userService.getUserProfile,
   });
 
-export const useUpdateUserProfileMutation = () =>
-  useMutation({
+export const useUpdateUserProfileMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: ({ name, profilePhoto }: UpdateProfilePayload) =>
       userService.updateProfile({ name, profilePhoto }),
+
+    // optimistic update
+    onMutate: async (newData) => {
+      await queryClient.cancelQueries({ queryKey: ["user-profile"] });
+
+      const previousData = queryClient.getQueryData(["user-profile"]);
+
+      // temporary update
+      queryClient.setQueryData(
+        ["user-profile"],
+        (old: GetUserProfileResponse) => ({
+          ...old,
+          name: newData.name,
+          profilePhoto:
+            newData.profilePhoto instanceof File
+              ? URL.createObjectURL(newData.profilePhoto)
+              : newData.profilePhoto,
+        }),
+      );
+
+      return { previousData };
+    },
+
+    onError: (err, newData, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(["user-profile"], context.previousData);
+      }
+    },
+
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["user-profile"] });
     },
   });
+};

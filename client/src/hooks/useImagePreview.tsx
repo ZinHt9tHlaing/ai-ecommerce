@@ -7,7 +7,6 @@ interface ImagePreview {
 
 export const useImagePreview = () => {
   const [image, setImage] = useState<ImagePreview | null>(null);
-  console.log("image", image);
 
   const setFile = (file: File) => {
     const url = URL.createObjectURL(file);

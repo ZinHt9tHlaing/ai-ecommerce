@@ -25,7 +25,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { useUpdateUserProfileMutation } from "@/queries/user-queries";
+import {
+  useGetUserProfileQuery,
+  useUpdateUserProfileMutation,
+} from "@/queries/user-queries";
 import { toast } from "sonner";
 import axios from "axios";
 import { useRef, useState } from "react";
@@ -36,6 +39,7 @@ const ProfilePage = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
+  const { data: userProfile } = useGetUserProfileQuery();
   const { mutateAsync: updateProfileMutation, isPending } =
     useUpdateUserProfileMutation();
 
@@ -43,7 +47,10 @@ const ProfilePage = () => {
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
       name: "",
-      profilePhoto: {},
+      profilePhoto: {
+        file: undefined,
+        url: "",
+      },
     },
   });
 
@@ -77,14 +84,14 @@ const ProfilePage = () => {
         {/* Avatar with Edit */}
         <div className="relative mx-auto mb-8 h-32 w-32">
           <img
-            src={"https://github.com/shadcn.png"}
+            src={userProfile?.profilePhoto}
             className="h-full w-full rounded-full border border-gray-200 object-cover"
-            // alt={user?.name}
+            alt={userProfile?.name}
           />
 
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <button className="absolute right-2 bottom-0 cursor-pointer rounded-full bg-gray-800 p-2 text-white transition-colors hover:bg-gray-800">
+              <button className="absolute right-2 bottom-0 cursor-pointer rounded-full bg-gray-600 p-2 text-white transition-colors hover:bg-gray-800">
                 <Pencil className="h-4 w-4" />
               </button>
             </DialogTrigger>
@@ -121,21 +128,20 @@ const ProfilePage = () => {
                   <FormField
                     control={form.control}
                     name="profilePhoto"
-                    render={() => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormLabel>Profile Photo</FormLabel>
                         <FormControl>
                           <Input
                             ref={fileInputRef}
                             type="file"
-                            accept="image/*"
                             onChange={(e) => {
                               const file = e.target.files?.[0];
                               if (!file) return;
 
                               setFile(file);
 
-                              form.setValue("profilePhoto", {
+                              field.onChange({
                                 file,
                                 url: URL.createObjectURL(file),
                               });
@@ -166,7 +172,7 @@ const ProfilePage = () => {
                             fileInputRef.current.value = "";
                           }
                         }}
-                        className="absolute top-1 right-1 hidden size-5 items-center justify-center rounded-full bg-red-500 text-white shadow-md group-hover:flex"
+                        className="absolute top-1 right-1 hidden size-5 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white shadow-md group-hover:flex"
                       >
                         <X className="size-4" />
                       </button>
@@ -197,22 +203,20 @@ const ProfilePage = () => {
         {/* User Info */}
         <div className="space-y-6 text-center">
           <h1 className="text-3xl font-bold text-gray-900">
-            {/* {user?.name} */}
-            ZHH
+            {userProfile?.name}
           </h1>
 
           <div className="space-y-2 text-sm text-gray-600">
             <p>
               Account Type:{" "}
               <span className="font-medium text-gray-900">
-                {/* {user?.owner ? "Admin" : "Customer"} */}
-                Customer
+                {userProfile?.owner ? "Admin" : "Customer"}
               </span>
             </p>
             <p>
               Cart Items:{" "}
               <span className="font-medium text-gray-900">
-                {/* {user?.cartItem?.length || 0} */}0
+                {userProfile?.cartItem?.length || 0}
               </span>
             </p>
           </div>
